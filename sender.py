@@ -1,4 +1,4 @@
-# sender.py (versão com painel de controlo da IA)
+# sender.py 
 
 import requests
 import json
@@ -147,5 +147,6 @@ if __name__ == '__main__':
             break
         else:
             print("Opção inválida. Tente novamente.")
+
 
         input("\nPressione Enter para continuar...")
