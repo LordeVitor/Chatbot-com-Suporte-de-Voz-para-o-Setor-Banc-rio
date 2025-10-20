@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # SERVIÇO 1: EVOLUTION API
+  evolution-api:
+    container_name: evolution_api
+    image: atendai/evolution-api:v1.8.2
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - evolution_instances:/evolution/instances
+      - evolution_store:/evolution/store
+
+  # SERVIÇO 2: CHATBOT COM IA
+  chatbot-ia:
+    container_name: chatbot_ia
+    restart: always
+    build: .
+    ports:
+      - "5001:5001"
+    env_file:
+      - .env
+    depends_on:
+      - evolution-api
+    volumes: 
+      - chatbot_data:/app/data
+
+volumes:
+  evolution_instances:
+  evolution_store:
+  chatbot_data:
