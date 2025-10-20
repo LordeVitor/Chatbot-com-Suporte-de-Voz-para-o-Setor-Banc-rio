@@ -41,7 +41,7 @@ app = Flask(__name__)
 # --- 2. FUNÇÕES DE IA E WHATSAPP ---
 
 def get_gemini_response(user_message, system_instruction):
-    """Gera uma resposta da IA usando uma instrução de sistema para definir a persona."""
+    """Gera uma resposta da IA usando uma instrução do sistema para definir a personalidade."""
     print(f"Instrução de Sistema Ativa: '{system_instruction[:70]}...'")
     print(f"Enviando para Gemini: '{user_message}'")
     
@@ -209,4 +209,5 @@ def set_mode():
         return jsonify({"status": "error", "reason": "Modo inválido. Use 'sales' ou 'standard'."}), 400 # atualizar aq tbm. 
     set_setting('chatbot_mode', new_mode)
     print(f"--- MODO DO CHATBOT ALTERADO PARA: {new_mode.upper()} ---")
+
     return jsonify({"status": "success", "new_mode": new_mode}), 200
