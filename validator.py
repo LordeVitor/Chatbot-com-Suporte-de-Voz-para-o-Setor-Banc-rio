@@ -17,7 +17,7 @@ def is_valid_name(name):
     if not re.search(r'[a-zA-Z]', name):
         return False
         
-    # 3. Verifica a presença de caracteres que geralmente não estão em nomes
+    # 3. Verifica a presença de caracteres que não estão em nomes
     # (emojis, símbolos excessivos, etc.).
     emoji_pattern = re.compile(
         "["
@@ -32,5 +32,6 @@ def is_valid_name(name):
     )
     if emoji_pattern.search(name):
         return False
+
 
     return True
