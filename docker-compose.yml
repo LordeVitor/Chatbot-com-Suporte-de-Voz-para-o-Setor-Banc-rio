@@ -27,7 +27,8 @@ services:
       - evolution-api
     volumes: 
       - chatbot_data:/app/data
-
+      - ./Dados:/app/Dados
+    
 volumes:
   evolution_instances:
   evolution_store:

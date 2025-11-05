@@ -4,3 +4,8 @@ requests
 google-generativeai
 gunicorn
 python-dotenv
+google-cloud-speech
+google-cloud-texttospeech
+Werkzeug < 3.0.0
+numpy
+PyPDF2

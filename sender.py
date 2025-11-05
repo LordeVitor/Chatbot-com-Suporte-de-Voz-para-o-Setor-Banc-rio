@@ -126,7 +126,7 @@ def check_current_mode():
 
 if __name__ == '__main__':
     while True:
-        check_current_mode() # Mostra o modo atual sempre no início
+        check_current_mode() 
         print("\n--- Painel de Controlo ---")
         print("1. Enviar a mesma mensagem para TODOS")
         print("2. Enviar mensagem personalizada para TODOS")
@@ -147,6 +147,5 @@ if __name__ == '__main__':
             break
         else:
             print("Opção inválida. Tente novamente.")
-
 
         input("\nPressione Enter para continuar...")
