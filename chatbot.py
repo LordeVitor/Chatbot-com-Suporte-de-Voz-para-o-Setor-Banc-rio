@@ -74,7 +74,7 @@ Contexto Fornecido:
 ---
 """
 
-PERSONA_STANDARD = """Você é uma IA assistente projetada para executar tarefas e responder perguntas.
+PERSONA_STANDARD = """Você é DUDA uma IA assistente projetada para executar tarefas e responder perguntas.
 Analise a solicitação do usuário e utilize todas as suas capacidades (processamento de texto, análise de imagem, etc.) para cumpri-la da forma mais completa e direta possível.
 Evite recusas desnecessárias; se a tarefa for Possivel, execute-a.
 """
@@ -221,19 +221,46 @@ def transcribe_audio_file(audio_file_path):
         print(traceback.format_exc())
         return None
 
+# --- FUNÇÃO DE CONVERSÃO MARKDOWN - SSML ---
+def convert_markdown_to_ssml(text):
+    """
+    Converte marcações simples de markdown (negrito/itálico) em tags SSML
+    para uma fala mais natural e limpa caracteres indesejados.
+    """
+    import re
+    
+    # 1. Converte negrito (**) para ênfase forte
+    text = re.sub(r'\*\*(.*?)\*\*', r'<emphasis level="strong">\1</emphasis>', text)
+    
+    # 2. Converte itálico (*) para ênfase moderada
+    text = re.sub(r'\*(.*?)\*', r'<emphasis level="moderate">\1</emphasis>', text)
+    
+    # 3. Remove quaisquer asteriscos ou aspas soltas que sobraram
+    text = text.replace('*', '').strip('"')
+    
+    # 4. Envolve a resposta final em tags <speak>
+    return f"<speak>{text}</speak>"
+
+
 # --- FUNÇÃO TTS ---
 def synthesize_text_to_audio(text_to_speak, output_dir):
     """
-    Sintetiza o texto em um arquivo MP3 e o salva em um local único.
+    Sintetiza o texto (convertendo Markdown para SSML) em um arquivo MP3 
+    e o salva em um local único.
     Retorna o caminho completo do arquivo salvo.
     """
     try:
         client = texttospeech.TextToSpeechClient()
-        synthesis_input = texttospeech.SynthesisInput(text=text_to_speak)
+
+        # 1. Converte a resposta da IA (markdown) para SSML
+        ssml_text = convert_markdown_to_ssml(text_to_speak)
+        
+        # 2. Usa SynthesisInput(ssml=...) em vez de (text=...)
+        synthesis_input = texttospeech.SynthesisInput(ssml=ssml_text)
 
         voice = texttospeech.VoiceSelectionParams(
             language_code="pt-BR",
-            name="pt-BR-Wavenet-B",
+            name="pt-BR-Chirp3-HD-Vindemiatrix",
             ssml_gender=texttospeech.SsmlVoiceGender.FEMALE,
         )
 
@@ -241,7 +268,7 @@ def synthesize_text_to_audio(text_to_speak, output_dir):
             audio_encoding=texttospeech.AudioEncoding.MP3
         )
 
-        print("Enviando texto para a API TTS...")
+        print("Enviando SSML para a API TTS...")
         response = client.synthesize_speech(
             input=synthesis_input, voice=voice, audio_config=audio_config
         )
@@ -313,7 +340,6 @@ def send_whatsapp_audio(number, audio_file_path, caption=""):
     finally:
         try:
             if os.path.exists(audio_file_path):
-                # Mantém o arquivo para fins de log/auditoria
                 print(f"Arquivo de áudio preservado em: {audio_file_path}")
         except Exception as e:
             print(f"Erro durante o bloco finally (preservação): {e}")
