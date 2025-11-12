@@ -85,7 +85,6 @@ app = Flask(__name__)
 def get_gemini_response(user_message, system_instruction, history_list=None, file_path=None):
     """
     Gera uma resposta da IA, opcionalmente incluindo um arquivo para análise.
-    (Esta função permanece idêntica)
     """
     print(f"Instrução de Sistema Ativa: '{system_instruction[:70]}...'")
     print(f"Enviando para Gemini: '{user_message}'")
@@ -924,4 +923,5 @@ if __name__ == '__main__':
         local_port = int(os.getenv("FLASK_RUN_PORT", 5002)) 
         app.run(host='0.0.0.0', port=local_port, debug=True)
     except Exception as e:
+
         print(f"Erro ao iniciar o servidor Flask: {e}")
